@@ -13,7 +13,7 @@ typedef uint8 boolean;
 #define FALSE (uint8)0
 #define TRUE (uint8)1
 
-#define BITSPERWORD (uint32)4U
+#define BITSPERWORD (uint32)5U
 #define WORD_RADIX (uint32)(1 << BITSPERWORD)
 #define STANDARD_USEBIT_MASK  (uint32)(WORD_RADIX - 1)
 #define STANDARD_CALCBIT_MASK (uint32)(0xFFFFFFFFU ^ STANDARD_USEBIT_MASK)

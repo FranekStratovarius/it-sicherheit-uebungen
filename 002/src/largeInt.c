@@ -110,9 +110,6 @@ void freeLargeInt(LargeInt* x) {
  **
  **/
 LargeInt* Add(LargeInt* s1, LargeInt* s2) {
-	// unterschiedliche wordsizes werden nicht gehandhabt!
-	// Bitte implementieren!
-
 	uint8 wordSize = 0;
 	// word size überprüfen
 	if (s1->wordSize == s2->wordSize) {
@@ -139,13 +136,15 @@ LargeInt* Add(LargeInt* s1, LargeInt* s2) {
 	boolean carry = 0;
 	// über alle teile aus data iterieren
 	for (int wordIndex = 0; wordIndex < wordSize; wordIndex++) {
-		// TODO: check ob ein data leer ist
+		// check ob ein data feld leer ist
+		uint32 first_summand = s1->usedWords >= wordIndex ? s1->data[wordIndex] : 0;
+		uint32 second_summand = s2->usedWords >= wordIndex ? s2->data[wordIndex] : 0;
 		// beide zahlen addieren
-		uint32 result = s1->data[wordIndex] + s2->data[wordIndex] + carry;
+		uint32 result = first_summand + second_summand + carry;
 		// carry auslesen
 		carry = (result & WORD_RADIX) != 0;
 		// ergebnis in data schreiben
-		out->data[wordIndex] = carry ? result & STANDARD_USEBIT_MASK : result;
+		out->data[wordIndex] = result & STANDARD_USEBIT_MASK;
 	}
 	// index der vordersten zahl ausrechnen
 	out->bitSize = (wordSize - 1)
@@ -165,92 +164,48 @@ LargeInt* Multiply(const LargeInt* m1, const LargeInt* m2) {
 
 	uint8 largest_word_size = 0;
 
-	/*
 	for (int first_number_index = 0; first_number_index < m1->bitSize; first_number_index++) {
+		// get bit from first number
 		int first_index = first_number_index / BITSPERWORD;
 		uint32 first_number = (m1->data[first_index] >> first_number_index % BITSPERWORD) & 0b1;
+
 		for (int second_number_index = 0; second_number_index < m2->bitSize; second_number_index++) {
+			// get bit from second number
 			int second_index = second_number_index / BITSPERWORD;
 			uint32 second_number = (m2->data[second_index] >> second_number_index % BITSPERWORD) & 0b1;
 
+			// multiply both numbers and shift them to fit in the word block
 			uint8 intermediate_result =
 				(first_number * second_number)
 				<< ((first_number_index + second_number_index) % BITSPERWORD);
 
+			// get index of word block in the result
 			uint32 result_index = (first_number_index + second_number_index) / BITSPERWORD;
+			// add intermediate result to end result...
 			uint32 result = out->data[result_index] + intermediate_result;
+			// ... and check if a carry happens
 			boolean carry = (result & WORD_RADIX) != 0;
-			out->data[result_index] = carry ? result & STANDARD_USEBIT_MASK : result;
+			// write result back into LargeInt
+			out->data[result_index] = result & STANDARD_USEBIT_MASK;
 
 			largest_word_size = result_index > largest_word_size ? result_index : largest_word_size;
 
 			uint32 carrycounter = 0;
 			while (carry) {
-				// carry weiterreichen
+				// pass carry
 				carrycounter++;
+				// add carry to next data block
 				out->data[result_index + carrycounter] = out->data[result_index + carrycounter] + 1;
+				// check if a new carry happens
 				carry = (out->data[result_index + carrycounter] & WORD_RADIX) != 0;
 				largest_word_size = result_index + carrycounter > largest_word_size ? result_index + carrycounter : largest_word_size;
 			}
 		}
 	}
-	//*/
 
-	//*
-	// iterade through half words
-	//uint32 BITSPERHALFWORD = BITSPERWORD / 2;
-	uint32 BITSPERHALFWORD = 2;
-	uint32 WORDMASK = 0b11;
-
-	for (int first_number_index = 0; first_number_index < m1->bitSize; first_number_index += BITSPERHALFWORD) {
-		int first_index = first_number_index / BITSPERWORD;
-		uint32 first_number = (m1->data[first_index] >> first_number_index % BITSPERWORD) & WORDMASK;
-
-		for (int second_number_index = 0; second_number_index < m2->bitSize; second_number_index += BITSPERHALFWORD) {
-			int second_index = second_number_index / BITSPERWORD;
-			uint32 second_number = (m2->data[second_index] >> second_number_index % BITSPERWORD) & WORDMASK;
-
-			uint8 intermediate_result =
-				(first_number * second_number)
-				<< ((first_number_index + second_number_index) % BITSPERWORD);
-
-			/*
-			printf("%b * %b = %b [%b]\n",
-				first_number << first_number_index,
-				second_number << second_number_index,
-				(first_number << first_number_index)
-				* (second_number << second_number_index),
-				intermediate_result
-			);
-			*/
-
-			uint32 result_index = (first_number_index + second_number_index) / BITSPERWORD;
-			uint32 result = out->data[result_index] + intermediate_result;
-			boolean carry = (result & ~STANDARD_USEBIT_MASK) >> BITSPERWORD;
-			out->data[result_index] = carry ? result & STANDARD_USEBIT_MASK : result;
-
-			largest_word_size = result_index > largest_word_size ? result_index : largest_word_size;
-			//printLargeInt(out);
-
-			uint32 carrycounter = 0;
-			while (carry) {
-				//printf("carry: %b\n", carry);
-				// carry weiterreichen
-				carrycounter++;
-				out->data[result_index + carrycounter] = out->data[result_index + carrycounter] + carry;
-				carry = (out->data[result_index + carrycounter] & WORD_RADIX) >> BITSPERWORD;
-				largest_word_size = result_index + carrycounter > largest_word_size ? result_index + carrycounter : largest_word_size;
-			}
-			//printLargeInt(out);
-		}
-	}
-	//*/
-
-	//*
 	out->bitSize = (largest_word_size)
 		* BITSPERWORD
 		+ 32 - GetNumberOfLeadingZeroes(out->data[largest_word_size]);
-	//*/
 
 	return out;
 }
