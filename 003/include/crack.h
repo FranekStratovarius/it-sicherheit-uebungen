@@ -3,6 +3,8 @@
 
 #include "sha1.h"
 
+#define THREADS (uint8)12
+
 typedef struct {
     char** words;
     // number of words that can be stored in the words array
@@ -10,6 +12,18 @@ typedef struct {
     // number of words that really are stored in the words array
     uint32 wordCount;
 } wordVec;
+
+typedef struct {
+	// input
+	uint32* sha1Hash;
+	char* alphabet;
+	uint8 alphabetSize;
+	uint8 threadCount;
+	uint8 threadId;
+	// output
+	char** wordpointer;
+	boolean* finished;
+} thread_data;
 
 /**
  * Loads a list of passwords from the file implied by the
@@ -30,6 +44,11 @@ void freeWordVec(wordVec *wv);
  * Try to find string to given hash with brute force in given alphabet.
  */
 char* bruteForceCrack(uint32* sha1Hash, char* alphabet, uint8 alphabetSize);
+
+/*
+ * Try to find string to given hash with brute force in given alphabet.
+ */
+char* bruteForceCrackThreaded(uint32* sha1Hash, char* alphabet, uint8 alphabetSize);
 
 /*
  * Try to find string to given hash from list of given words.

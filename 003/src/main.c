@@ -4,7 +4,7 @@
 #include "crack.h"
 
 int main() {
-	/*
+	//*
 	{
 		uint32 hash0[] = {
 			0x65caa18f,
@@ -33,10 +33,29 @@ int main() {
 		};
 		// = G1mpelh4us
 
-		// char* word = bruteForceCrack(hash0, "01", 2);
-		// char* word = bruteForceCrack(hash0, "0123456789", 10);
-		char* word = bruteForceCrack(hash0, "abcdefghijklmnopqrstuvwxyz", 26);
+		uint32 hash3[] = {
+			0xf017feec,
+			0x7a814d6b,
+			0x74eb0a55,
+			0x3f97c702,
+			0x1b5528ef
+		};
+		// = 970211
+
+		uint32 hash4[] = {
+			0x47ab9979,
+			0x443fb7ed,
+			0x1c193d06,
+			0x773333ba,
+			0x7876094f
+		};
+		// = 010
+
+		// char* word = bruteForceCrackThreaded(hash4, "01", 2);
+		char* word = bruteForceCrackThreaded(hash1, "0123456789", 10);
+		// char* word = bruteForceCrackThreaded(hash0, "abcdefghijklmnopqrstuvwxyz", 26);
 		// char* word = bruteForceCrack(hash0, "abcdefghijklmnopqrstuvwxyz0123456789", 36);
+		// char* word = bruteForceCrackThreaded(hash0, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 62);
 
 		printf(
 			"password found: %s\n",

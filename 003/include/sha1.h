@@ -1,13 +1,16 @@
 #ifndef SHA1_H
 #define SHA1_H
 
+#include <stdint.h>
 
-typedef unsigned int uint32;
-typedef signed int sint32;
-typedef unsigned int uint16;
-typedef signed int sint16;
-typedef unsigned int uint8;
-typedef signed int sint8;
+typedef uint64_t uint64;
+typedef int64_t sint64;
+typedef uint32_t uint32;
+typedef int32_t sint32;
+typedef uint16_t uint16;
+typedef int16_t sint16;
+typedef uint8_t uint8;
+typedef int8_t sint8;
 
 typedef uint8 boolean;
 #define FALSE (uint8)0

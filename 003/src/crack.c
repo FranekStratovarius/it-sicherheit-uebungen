@@ -1,4 +1,5 @@
 #include <math.h>
+#include <pthread.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -186,6 +187,75 @@ char* bruteForceCrack(uint32* sha1Hash, char* alphabet, uint8 alphabetSize) {
 		}
 	}
 	return "could not find password";
+}
+
+/*
+ * This function runs in the extra threads and tries to find the right word.
+ */
+void *bruteForceCrackThread(void *argument) {
+	thread_data *tdata = (thread_data*)argument;
+
+	for (uint32 length = 1; length < 16; length++) {
+		// calculate max index of words to be generated
+		uint64 maxIndex = (int)pow(tdata->alphabetSize, length);
+		for (uint64 i = 0; i < maxIndex; i += tdata->threadCount) {
+			if (*tdata->finished == TRUE) {
+				pthread_exit(NULL);
+			}
+			// generate word from index in given alphabet
+			char* word = createWordFromAlphabet(
+				tdata->alphabet,
+				tdata->alphabetSize,
+				i - tdata->threadId,
+				length
+			);
+			// and check word with hash
+			if (checkHash(word, tdata->sha1Hash)) {
+				*tdata->finished = TRUE;
+				*tdata->wordpointer = word;
+				pthread_exit(NULL);
+			}
+			free(word);
+		}
+	}
+	pthread_exit(NULL);
+}
+
+/*
+ * Try to find string to given hash with brute force in given alphabet.
+ */
+char* bruteForceCrackThreaded(uint32* sha1Hash, char* alphabet, uint8 alphabetSize) {
+	pthread_t* threads = calloc(THREADS, sizeof(pthread_t));
+	thread_data** tdatas = calloc(THREADS, sizeof(thread_data*));
+	char* word = NULL;
+	boolean finished = FALSE;
+	for (int i = 0; i < THREADS; i++) {
+		tdatas[i] = malloc(sizeof(thread_data));
+		tdatas[i]->sha1Hash = sha1Hash;
+		tdatas[i]->alphabet = alphabet;
+		tdatas[i]->alphabetSize = alphabetSize;
+		tdatas[i]->threadCount = THREADS;
+		tdatas[i]->threadId = i;
+		tdatas[i]->wordpointer = &word;
+		tdatas[i]->finished = &finished;
+
+		pthread_create(
+			&threads[i],
+			NULL,
+			bruteForceCrackThread,
+			(void*)tdatas[i]
+		);
+	}
+
+	for (int i = 0; i < THREADS; i++) {
+		pthread_join(threads[i], NULL);
+		free(tdatas[i]);
+	}
+	free(tdatas);
+
+	free(threads);
+
+	return word;
 }
 
 /*

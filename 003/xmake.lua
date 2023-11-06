@@ -4,6 +4,7 @@ target("uebung_003")
     set_kind("binary")
     add_files("src/*.c")
 	add_includedirs("include")
+	add_links("pthread")
 
 	-- copy assets after build
 	after_build(function (target)
