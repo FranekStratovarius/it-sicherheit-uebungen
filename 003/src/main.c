@@ -21,6 +21,7 @@ int main() {
 			0x6ed592bf,
 			0xe59ff958
 		};
+		// = 0177812630
 
 		uint32 hash2[] = {
 			0xfe5f8164,
@@ -29,19 +30,20 @@ int main() {
 			0x493a757a,
 			0xadc3e65e
 		};
+		// = G1mpelh4us
 
 		printf(
 			"password found: %s\n",
 			// bruteForceCrack(hash0, "01", 2)
 			// bruteForceCrack(hash0, "0123456789", 10)
-			// bruteForceCrack(hash0, "abcdefghijklmnopqrstuvwxyz", 26)
-			bruteForceCrack(hash1, "abcdefghijklmnopqrstuvwxyz0123456789", 36)
+			bruteForceCrack(hash0, "abcdefghijklmnopqrstuvwxyz", 26)
+			// bruteForceCrack(hash0, "abcdefghijklmnopqrstuvwxyz0123456789", 36)
 		);
 	}
 	//*/
 
 	// dict crack
-	//*
+	/*
 	{
 		uint32 hash0[] = {
 			0xde145a20,
