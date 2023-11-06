@@ -66,5 +66,5 @@ extern LargeInt* InitLargeIntWithUint32(uint32 value, uint8 wordSize);
 extern LargeInt* Add(LargeInt* s1, LargeInt* s2);
 extern LargeInt* Multiply(const LargeInt* m1, const LargeInt* m2);
 extern void printLargeInt(LargeInt *x);
-
+extern int sprintLargeInt(LargeInt *x);
 #endif /* #ifndef ARITH_BIGINT_H */

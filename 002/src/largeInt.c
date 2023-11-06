@@ -130,7 +130,6 @@ LargeInt* Add(LargeInt* s1, LargeInt* s2) {
 	LargeInt* out = (LargeInt*)calloc(1, sizeof(LargeInt));
 	out->data = (uint32*)calloc(wordSize, sizeof(uint32));
 	out->wordSize = wordSize;
-	out->usedWords = wordSize;
 
 	// carry ist anfangs 0
 	boolean carry = 0;
@@ -147,9 +146,8 @@ LargeInt* Add(LargeInt* s1, LargeInt* s2) {
 		out->data[wordIndex] = result & STANDARD_USEBIT_MASK;
 	}
 	// index der vordersten zahl ausrechnen
-	out->bitSize = (wordSize - 1)
-		* BITSPERWORD
-		+ 32 - GetNumberOfLeadingZeroes(out->data[wordSize - 1]);
+	RecomputeUsageVariables(out);
+
 	return out;
 }
 
@@ -159,8 +157,6 @@ LargeInt* Multiply(const LargeInt* m1, const LargeInt* m2) {
 	LargeInt* out = (LargeInt*)calloc(1, sizeof(LargeInt));
 	out->data = (uint32*)calloc(wordSize, sizeof(uint32));
 	out->wordSize = wordSize;
-	out->usedWords = wordSize;
-	out->bitSize = out->wordSize * BITSPERWORD;
 
 	uint8 largest_word_size = 0;
 
@@ -195,17 +191,16 @@ LargeInt* Multiply(const LargeInt* m1, const LargeInt* m2) {
 				// pass carry
 				carrycounter++;
 				// add carry to next data block
-				out->data[result_index + carrycounter] = out->data[result_index + carrycounter] + 1;
+				uint32 result = (out->data[result_index + carrycounter] + 1);
 				// check if a new carry happens
-				carry = (out->data[result_index + carrycounter] & WORD_RADIX) != 0;
+				carry = (result & WORD_RADIX) != 0;
+				out->data[result_index + carrycounter] = result & STANDARD_USEBIT_MASK;
 				largest_word_size = result_index + carrycounter > largest_word_size ? result_index + carrycounter : largest_word_size;
 			}
 		}
 	}
 
-	out->bitSize = (largest_word_size)
-		* BITSPERWORD
-		+ 32 - GetNumberOfLeadingZeroes(out->data[largest_word_size]);
+	RecomputeUsageVariables(out);
 
 	return out;
 }
@@ -224,4 +219,12 @@ void printLargeInt(LargeInt *x) {
 		i--;
 	}
 	printf("\n");
+}
+
+int sprintLargeInt(LargeInt *x) {
+	int result = 0;
+	for (int i = 0; i < x->usedWords; i++) {
+		result += x->data[i] << (BITSPERWORD * i);
+	}
+	return result;
 }
