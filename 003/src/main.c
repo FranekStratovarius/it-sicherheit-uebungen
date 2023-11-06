@@ -1,9 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "crack.h"
 
 int main() {
-	//*
+	/*
 	{
 		uint32 hash0[] = {
 			0x65caa18f,
@@ -32,13 +33,16 @@ int main() {
 		};
 		// = G1mpelh4us
 
+		// char* word = bruteForceCrack(hash0, "01", 2);
+		// char* word = bruteForceCrack(hash0, "0123456789", 10);
+		char* word = bruteForceCrack(hash0, "abcdefghijklmnopqrstuvwxyz", 26);
+		// char* word = bruteForceCrack(hash0, "abcdefghijklmnopqrstuvwxyz0123456789", 36);
+
 		printf(
 			"password found: %s\n",
-			// bruteForceCrack(hash0, "01", 2)
-			// bruteForceCrack(hash0, "0123456789", 10)
-			bruteForceCrack(hash0, "abcdefghijklmnopqrstuvwxyz", 26)
-			// bruteForceCrack(hash0, "abcdefghijklmnopqrstuvwxyz0123456789", 36)
+			word
 		);
+		free(word);
 	}
 	//*/
 
@@ -74,11 +78,14 @@ int main() {
 
 		wordVec* dictionary = loadPasswordList("assets/dic-0294.txt");
 
+		char* word = dictCrack1(hash2, dictionary);
+
 		printf(
 			"password found: %s\n",
-			dictCrack1(hash2, dictionary)
+			word
 		);
 
+		free(word);
 		freeWordVec(dictionary);
 	}
 	//*/

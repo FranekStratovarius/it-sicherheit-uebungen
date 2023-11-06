@@ -125,7 +125,7 @@ boolean hashesEqual(uint32 *h1, uint32 *h2) {
 char* createWordFromAlphabet(
 	char* alphabet, uint8 alphabetSize, uint32 index, uint32 length
 ) {
-	char* word = (char*)calloc(length, sizeof(char));
+	char* word = (char*)calloc(length + 1, sizeof(char));
 
 	for (uint32 i = 0; i < length; i++) {
 		uint8 letter = index % alphabetSize;
@@ -133,6 +133,7 @@ char* createWordFromAlphabet(
 		index = index / alphabetSize;
 	}
 
+	word[length] = '\0';
 	return word;
 }
 
