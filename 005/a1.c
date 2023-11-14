@@ -6,10 +6,10 @@ int g(int x) {
     // Bitte ausprogrammieren
     // Bitte nichts außerhalb dieser Funktion verändern.
     // Auch die Deklaration von g darf nicht verändert werden.
-	volatile int evil = 0;
-	volatile int* ptri = &evil + 12;
-	volatile int* ptry = &evil + 11;
-	
+	int evil = 0;
+	int* ptri = &evil + 12;
+	int* ptry = &evil + 11;
+
 	if (*ptry < 3000000) {
 		(*ptry)++;
 		*ptri = 1;
