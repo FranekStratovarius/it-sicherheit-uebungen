@@ -8,6 +8,8 @@ void q() {
 	// bitte modifizieren Sie nur im Bereich unterhalb dieser Zeile
     
 	// Toben Sie sich hier aus!
+	// bessere Lösung?: Auf dem Stack nach einer Adresse suchen, die in der Nähe von q ist
+	// __builtin_return_address
 	int evil_int = 0;
 	*(&evil_int + 3) = (int)&evil;
     
