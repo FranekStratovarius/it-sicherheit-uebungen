@@ -35,7 +35,6 @@ local count = 1
 for i = 1, #str do
 	local c = str:sub(i,i)
 	if map[c] then
-		-- out[i] = map[c]
 		out = out:sub(1, i - 1) .. map[c] .. out:sub(i + 1)
 	end
 end
@@ -64,13 +63,13 @@ table.sort(
 		return a.count > b.count
 	end
 )
--- table.sort(counter)
+
 for k,v in ipairs(counter) do
 	print(k, v.letter, v.count)
 end
 
 print(str)
-print("\n")
+print()
 print(out)
 
 -- frequencies
@@ -92,7 +91,7 @@ print(out)
 800	Kx
 500	Qx
 400	Jx, Xx
-200	Z
+200	Zx
 ]]
 
 --[[

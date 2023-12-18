@@ -8,7 +8,7 @@ public class OneTimePad {
 	 * Dabei wird jedes Symbol gemäß der erweiterten ASCII-Tabelle mit
 	 * 8 Bit als ein Byte codiert.
 	 * Diese Methode ist die "Umkehrfunktion"
-	 * zu {@link #getStringForm(String)}. 
+	 * zu {@link #getStringForm(String)}.
 	 */
 	public static byte[] getBinaryForm(String s) {
 		// Bitte implementieren!
@@ -23,9 +23,9 @@ public class OneTimePad {
 	/**
 	 * Interpretiert das gegebene byte-Array als String.
 	 * Dafür wird jedes Byte als Symbol gemäß der erweiterten ASCII
-	 * Tabelle interpretiert. 
+	 * Tabelle interpretiert.
 	 * Diese Methode ist die "Umkehrfunktion"
-	 * zu {@link #getBinaryForm(String)}. 
+	 * zu {@link #getBinaryForm(String)}.
 	 */
 	public static String getStringForm(byte[] c) {
 		// Bitte implementieren!
@@ -38,7 +38,7 @@ public class OneTimePad {
 	}
 
 	/**
-	 * Produziert ein (pseudo-)zufälliges Array von bytes mit der gegebenen Länge. 
+	 * Produziert ein (pseudo-)zufälliges Array von bytes mit der gegebenen Länge.
 	 */
 	public static byte[] getRandomKey(int length) {
 		// Bitte implementieren!
@@ -49,11 +49,11 @@ public class OneTimePad {
 
 	/**
 	 * Verschlüsselt die gegebene Nachricht msg mit dem
-	 * gegebenen Schlüssel key gemäß dem Vorgehen von Vernams 
-	 * One-Time-Pad. 
+	 * gegebenen Schlüssel key gemäß dem Vorgehen von Vernams
+	 * One-Time-Pad.
 	 * Wirft eine IllegalArgumentException, falls eine der
-	 * Eingaben null ist oder falls die Länge der Arrays nicht 
-	 * übereinstimmen. 
+	 * Eingaben null ist oder falls die Länge der Arrays nicht
+	 * übereinstimmen.
 	 */
 	public static byte[] encode(byte[] msg, byte[] key) {
 		// Bitte implementieren!
@@ -69,11 +69,11 @@ public class OneTimePad {
 
 	/**
 	 * Entschlüsselt den gegebenen Chiffretext chiffre mit dem
-	 * gegebenen Schlüssel key gemäß dem Vorgehen von Vernams 
-	 * One-Time-Pad. 
+	 * gegebenen Schlüssel key gemäß dem Vorgehen von Vernams
+	 * One-Time-Pad.
 	 * Wirft eine IllegalArgumentException, falls eine der
-	 * Eingaben null ist oder falls die Länge der Arrays nicht 
-	 * übereinstimmen. 
+	 * Eingaben null ist oder falls die Länge der Arrays nicht
+	 * übereinstimmen.
 	 */
 	public static byte[] decode(byte[] chiffre, byte[] key) {
 		// Bitte implementieren!
@@ -82,7 +82,7 @@ public class OneTimePad {
 
 	/**
 	 * Gibt eine binäre Repräsentation des gegebenen byte-Arrays zurück.
-	 * Dabei wird jedes byte mit 8 Symbolen aus {0, 1} 
+	 * Dabei wird jedes byte mit 8 Symbolen aus {0, 1}
 	 * repräsentiert (auch die führenden 0-en!).
 	 */
 	public static String toBinaryString(byte[] buf) {
