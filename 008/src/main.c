@@ -14,9 +14,10 @@ int isEquivalent(int x, int y, int m) {
 
 int isPrime(int x) {
 	for (int i = 2; i < x; i++) {
-		float result = x / (float)i;
-		if (result - (int)result == 0) {
+		int divided = x / i;
+		if (divided * i == x) {
 			return i;
+			// return 0;
 		}
 	}
 	return 1;
